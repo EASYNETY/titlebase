@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: titlebase-frontend
+    env: node
+    buildCommand: pnpm install --no-frozen-lockfile && pnpm run build
+    startCommand: pnpm start
