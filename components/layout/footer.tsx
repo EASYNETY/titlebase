@@ -1,11 +1,24 @@
+"use client"
+
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Mail, MapPin } from "lucide-react"
+import { useAuth } from "@/lib/hooks/use-auth"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
+
+  const protectedNav = (e: React.MouseEvent, path: string) => {
+    if (!isAuthenticated) {
+      e.preventDefault()
+      router.push("/login")
+    }
+  }
 
   return (
     <footer className="bg-muted/30 border-t border-border mt-auto">
@@ -65,22 +78,47 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Account</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/profile" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="/user"
+                  onClick={(e) => protectedNav(e, "/user")}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Account
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/profile"
+                  onClick={(e) => protectedNav(e, "/profile")}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Profile Settings
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="/portfolio"
+                  onClick={(e) => protectedNav(e, "/portfolio")}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   My Portfolio
                 </Link>
               </li>
               <li>
-                <Link href="/transactions" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="/transactions"
+                  onClick={(e) => protectedNav(e, "/transactions")}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Transaction History
                 </Link>
               </li>
               <li>
-                <Link href="/wallet-setup" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="/wallet-setup"
+                  onClick={(e) => protectedNav(e, "/wallet-setup")}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Wallet Setup
                 </Link>
               </li>
@@ -91,12 +129,12 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/support#help" className="text-muted-foreground hover:text-primary transition-colors">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="/support" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link href="/support#contact" className="text-muted-foreground hover:text-primary transition-colors">
                   Contact Support
                 </Link>
               </li>
@@ -121,13 +159,13 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center gap-4 text-sm text-muted-foreground">
             <p>&copy; {currentYear} TitleBase. All rights reserved.</p>
             <div className="flex items-center gap-4">
-              <Link href="/privacy" className="hover:text-primary transition-colors">
+              <Link href="/legal#privacy" className="hover:text-primary transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-primary transition-colors">
+              <Link href="/legal#terms" className="hover:text-primary transition-colors">
                 Terms of Service
               </Link>
-              <Link href="/cookies" className="hover:text-primary transition-colors">
+              <Link href="/legal#cookies" className="hover:text-primary transition-colors">
                 Cookie Policy
               </Link>
             </div>

@@ -8,7 +8,6 @@ import { marketplaceApi } from "@/lib/api/client"
 import { propertiesApi } from "@/lib/api/client"
 import { paymentsApi } from "@/lib/api/client"
 import Image from "next/image"
-import { Header } from "@/components/layout/header"
 import { MobileNav } from "@/components/layout/mobile-nav"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -191,7 +190,6 @@ export default function PropertyDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background pb-20">
-        <Header />
         <main className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-center h-64">
             <div className="flex items-center gap-2">
@@ -208,7 +206,6 @@ export default function PropertyDetailPage() {
   if (error || !property || !listing) {
     return (
       <div className="min-h-screen bg-background pb-20">
-        <Header />
         <main className="container mx-auto px-4 py-6">
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold mb-2">Property Not Found</h2>
@@ -227,8 +224,6 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <Header />
-
       <main className="container mx-auto px-4 py-6 space-y-6">
         {/* Image Gallery */}
         <div className="space-y-4">
@@ -534,12 +529,12 @@ export default function PropertyDetailPage() {
         </Tabs>
       </main>
 
-      {/* Payment Modal */}
+      {/* Bid Modal */}
       {showBidModal && listing && (
         <BidModal
           isOpen={showBidModal}
           onClose={() => setShowBidModal(false)}
-          onSuccess={() => fetchProperty()}
+          initialAmount={bidAmount}
           property={{
             id: listing.id,
             title: property.title,

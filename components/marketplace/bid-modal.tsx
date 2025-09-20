@@ -1,7 +1,7 @@
 "use client"
 
 import { marketplaceApi } from "@/lib/api/client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +16,7 @@ interface BidModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess?: () => void
+  initialAmount?: string
   property: {
     id: string
     title: string
@@ -26,12 +27,16 @@ interface BidModalProps {
   }
 }
 
-export function BidModal({ isOpen, onClose, property, onSuccess }: BidModalProps) {
+export function BidModal({ isOpen, onClose, property, onSuccess, initialAmount }: BidModalProps) {
   const { isAuthenticated, user } = useAuth()
   const { toast } = useToast()
-  const [bidAmount, setBidAmount] = useState("")
+  const [bidAmount, setBidAmount] = useState(initialAmount ?? "")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (initialAmount !== undefined) setBidAmount(initialAmount)
+  }, [initialAmount])
 
   const currentBidValue = property.currentBid ? Number.parseFloat(property.currentBid.replace(/[^0-9.]/g, "")) : 0
   const minBidIncrement = property.minBidIncrement || 0.05 // 5% default
