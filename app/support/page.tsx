@@ -3,9 +3,8 @@ import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Mail, MessageSquare, LifeBuoy, BookOpen } from "lucide-react"
+import { MessageSquare, LifeBuoy, BookOpen } from "lucide-react"
+import { ContactForm } from "@/components/support/contact-form"
 
 export const metadata: Metadata = {
   title: "Support | TitleBase",
@@ -78,24 +77,8 @@ export default function SupportPage() {
             <p className="text-sm text-muted-foreground">
               Need more help? Send us a message and our team will get back to you.
             </p>
-            <form
-              className="space-y-3"
-              onSubmit={(e) => {
-                e.preventDefault()
-                window.location.href = "mailto:hello@titlebase.nz?subject=TitleBase Support&body=Describe your issue here."
-              }}
-            >
-              <div className="grid md:grid-cols-2 gap-3">
-                <Input placeholder="Your name" required />
-                <Input type="email" placeholder="Your email" required />
-              </div>
-              <Input placeholder="Subject" required />
-              <Textarea placeholder="How can we help you?" required rows={5} />
-              <Button type="submit" className="w-full md:w-auto">
-                <Mail className="w-4 h-4 mr-2" />
-                Send Email
-              </Button>
-            </form>
+            {/* Client component handles interactivity to satisfy Next.js RSC rules */}
+            <ContactForm />
             <Separator />
             <p className="text-xs text-muted-foreground">
               Or email us directly at{" "}
