@@ -1,5 +1,5 @@
 // API Client for connecting frontend to backend
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 class ApiClient {
   private baseURL: string;

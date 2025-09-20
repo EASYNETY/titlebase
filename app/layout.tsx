@@ -6,6 +6,8 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Suspense } from "react"
 
+const enableVercelAnalytics = process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === '1'
+
 import { Header } from "@/components/layout/header"
 import { Providers } from "./providers"
 import { MonacoEditorSetup } from "@/components/monaco-editor-setup"
@@ -50,7 +52,7 @@ export default function RootLayout({
             <Footer />
           </Providers>
         </Suspense>
-        <Analytics />
+        {enableVercelAnalytics && <Analytics />}
       </body>
     </html>
   )
