@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -18,6 +19,7 @@ import { KYCModal } from "./kyc-modal"
 export function UserMenu() {
   const { user, logout } = useAuth()
   const [showKYC, setShowKYC] = useState(false)
+  const [open, setOpen] = useState(false)
 
   if (!user) return null
 
@@ -31,9 +33,15 @@ export function UserMenu() {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+          <Button
+            variant="ghost"
+            className="relative h-10 w-10 rounded-full"
+            aria-haspopup="menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
             <Avatar className="h-10 w-10">
               <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name || "User"} />
               <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
@@ -41,7 +49,7 @@ export function UserMenu() {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-80" align="end" forceMount>
+        <DropdownMenuContent className="w-80 z-50" align="end" sideOffset={8} forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-2">
               <div className="flex items-center gap-2">
@@ -81,14 +89,25 @@ export function UserMenu() {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem onClick={() => (window.location.href = "/marketplace")}>Marketplace</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => (window.location.href = "/portfolio")}>Portfolio</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => (window.location.href = "/transactions")}>Transactions</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => (window.location.href = "/billing")}>Billing</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => (window.location.href = "/support")}>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => (window.location.href = "/user/settings")}>Settings</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => (window.location.href = "/profile")}>Profile</DropdownMenuItem>
+          {/* Primary user actions */}
+          <DropdownMenuItem asChild>
+            <Link href="/user">Account</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/user/settings">Profile Settings</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/user">Dashboard</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/portfolio">My Portfolio</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/transactions">Transaction History</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/wallet-setup">Wallet Setup</Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
 
           {!user.isKYCVerified && (
@@ -96,15 +115,15 @@ export function UserMenu() {
           )}
 
           {!user.smartAccountAddress && (
-            <DropdownMenuItem onClick={() => (window.location.href = "/smart-account")}>
-              Create Smart Account
+            <DropdownMenuItem asChild>
+              <Link href="/smart-account">Create Smart Account</Link>
             </DropdownMenuItem>
           )}
 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem onClick={logout} className="text-destructive">
-            Sign Out
+            Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

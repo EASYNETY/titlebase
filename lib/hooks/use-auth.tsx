@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAuthenticated = !!user
 
   useEffect(() => {
-    // Check for existing session
+    // Check for existing session on first mount
     const checkSession = async () => {
       try {
         const response = await authApi.getSession() as any
@@ -83,7 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Handle role-based redirection if user is logged in but on wrong page
         const currentPath = window.location.pathname
         if (response.redirectUrl && !currentPath.startsWith(response.redirectUrl) && currentPath !== '/') {
-          // Only redirect if we're not already on the correct dashboard
           const expectedPath = response.redirectUrl
           if (currentPath !== expectedPath) {
             window.location.href = expectedPath
@@ -100,6 +99,67 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     checkSession()
+  }, [])
+
+  // Rehydrate session when a token appears after login (without manual refresh)
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("auth-token") : null
+    if (token && !user && !isLoading) {
+      ;(async () => {
+        try {
+          setIsLoading(true)
+          const response = await authApi.getSession() as any
+          setUser(response as User)
+        } catch (err) {
+          console.error("Session refresh failed:", err)
+          setUser(null)
+        } finally {
+          setIsLoading(false)
+        }
+      })()
+    }
+  }, [user, isLoading])
+
+  // Listen for auth-token changes across tabs/windows and re-fetch session
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "auth-token") {
+        ;(async () => {
+          try {
+            setIsLoading(true)
+            const response = await authApi.getSession() as any
+            setUser(response as User)
+          } catch (err) {
+            console.error("Storage session sync failed:", err)
+            setUser(null)
+          } finally {
+            setIsLoading(false)
+          }
+        })()
+      }
+    }
+    window.addEventListener("storage", onStorage)
+    return () => window.removeEventListener("storage", onStorage)
+  }, [])
+
+  // React to explicit login completion signal (from login modal) without requiring manual refresh
+  useEffect(() => {
+    const onLoggedIn = () => {
+      ;(async () => {
+        try {
+          setIsLoading(true)
+          const response = await authApi.getSession() as any
+          setUser(response as User)
+        } catch (err) {
+          console.error("Explicit login sync failed:", err)
+          setUser(null)
+        } finally {
+          setIsLoading(false)
+        }
+      })()
+    }
+    window.addEventListener("auth:logged-in", onLoggedIn as EventListener)
+    return () => window.removeEventListener("auth:logged-in", onLoggedIn as EventListener)
   }, [])
 
   useEffect(() => {

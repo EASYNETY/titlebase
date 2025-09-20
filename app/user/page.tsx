@@ -11,17 +11,18 @@ import { Wallet, Home, ShoppingCart, CreditCard, User, Settings, Gavel } from "l
 import { useState, useEffect } from "react"
 
 export default function UserDashboard() {
-  const { user, logout } = useAuth()
+  const { user, logout, isLoading } = useAuth()
   const router = useRouter()
   const [bids, setBids] = useState<any[]>([])
   const [loadingBids, setLoadingBids] = useState(true)
+  const [triedRefresh, setTriedRefresh] = useState(false)
 
   useEffect(() => {
     if (user) {
       const fetchBids = async () => {
         try {
-          const response = await marketplaceApi.getBids({ bidderId: user.id })
-          setBids(response.bids || [])
+          const response: any = await marketplaceApi.getBids({ bidderId: user.id })
+          setBids((response && (response.bids || response.data || [])) || [])
         } catch (err) {
           console.error('Failed to fetch bids', err)
         } finally {
@@ -32,8 +33,44 @@ export default function UserDashboard() {
     }
   }, [user])
 
-  if (!user) {
-    return <div>Loading...</div>
+  // Fail-safe: if we arrive on /user with a fresh token but context isn't hydrated yet,
+  // trigger a one-time client refresh to re-run session checks. Also avoids footer flash.
+  useEffect(() => {
+    if (!user && !isLoading && !triedRefresh) {
+      const t = setTimeout(() => {
+        setTriedRefresh(true)
+        router.refresh()
+      }, 400)
+      return () => clearTimeout(t)
+    }
+  }, [user, isLoading, triedRefresh, router])
+
+
+  if (isLoading || !user) {
+    // Full-viewport overlay below sticky header (h-16), hides footer while loading
+    return (
+      <div className="fixed left-0 right-0 top-16 bottom-0 z-50 bg-black">
+        <div aria-hidden className="absolute inset-0">
+          <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-gradient-to-br from-fuchsia-500/20 via-cyan-500/20 to-emerald-400/20 blur-3xl" />
+          <div className="absolute top-24 -right-52 h-[30rem] w-[30rem] rounded-full bg-gradient-to-tr from-blue-500/15 to-emerald-400/15 blur-3xl" />
+          <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        </div>
+
+        <div className="relative mx-auto flex h-full max-w-7xl items-center justify-center px-4">
+          <div className="text-center text-white">
+            <div className="select-none text-[18vw] leading-none font-black tracking-tight titlebase-animated opacity-20">
+              TITLEBASE
+            </div>
+            <h1 className="mt-4 text-3xl md:text-4xl font-semibold">Preparing your dashboard</h1>
+            <p className="mt-2 text-white/80">Fetching portfolio, bids and personalized insights...</p>
+
+            <div className="mt-8 mx-auto h-1 w-64 overflow-hidden rounded-full bg-white/20">
+              <div className="h-full w-1/2 animate-pulse rounded-full bg-white/80" />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

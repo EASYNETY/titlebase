@@ -121,3 +121,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* TitleBase animated wordmark and helper animations */
+@keyframes tb-gradient-x {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+@keyframes tb-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255,255,255,0)); transform: translateY(0) }
+  50% { filter: drop-shadow(0 0 16px rgba(255,255,255,0.25)); transform: translateY(-2px) }
+}
+.titlebase-animated {
+  background-image: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,1), rgba(255,255,255,0.35));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: tb-gradient-x 12s linear infinite, tb-glow 8s ease-in-out infinite;
+}

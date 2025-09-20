@@ -101,8 +101,9 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
       if (response.ok) {
         localStorage.setItem('auth-token', data.token)
+        try { window.dispatchEvent(new Event('auth:logged-in')) } catch {}
         handleClose()
-        router.push(data.redirectUrl || '/user')
+        router.replace(data.redirectUrl || '/user')
       } else {
         setError(data.error || 'Authentication failed')
       }
@@ -136,14 +137,12 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
       {/* ================================================================== */}
       <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col">
         {showSuperAdmin ? (
-          <SuperAdminLogin 
-            onSubmit={handleSuperAdminLogin}
-            onBack={() => {
-                setShowSuperAdmin(false)
-                setError(null)
+          <SuperAdminLogin
+            isOpen={showSuperAdmin}
+            onClose={() => {
+              setShowSuperAdmin(false)
+              setError(null)
             }}
-            error={error}
-            isLoading={isLoading}
           />
         ) : (
           <>
