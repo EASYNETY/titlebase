@@ -44,8 +44,8 @@ export default function PortfolioPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">Investment Dashboard</h1>
-            <p className="text-slate-600">Track your fractional real estate investments and returns</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">My Properties</h1>
+            <p className="text-slate-600">View and manage your verified property titles.</p>
           </div>
           <div className="flex gap-2">
             <Select defaultValue="all">

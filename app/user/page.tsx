@@ -5,6 +5,8 @@ import { marketplaceApi } from "@/lib/api/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { WithdrawTBA } from "@/components/payments/withdraw-tba"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Wallet, Home, ShoppingCart, CreditCard, User, Settings, Gavel } from "lucide-react"
@@ -97,6 +99,25 @@ export default function UserDashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Optional wallet linking banner */}
+        {!user.address && (
+          <div className="mb-6 rounded-xl border border-white/10 bg-muted/50 p-4">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="font-medium">Link a wallet (optional)</p>
+                <p className="text-sm text-muted-foreground">
+                  You can invest, browse, and manage your account without a crypto wallet. Power actions like direct
+                  on-chain listing work best with a linked wallet.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button asChild variant="outline">
+                  <Link href="/wallet-setup">Link wallet</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="mb-8">
           <h2 className="text-3xl font-bold mb-2">User Dashboard</h2>
           <p className="text-muted-foreground">Manage your NFT investments and portfolio</p>
@@ -147,6 +168,11 @@ export default function UserDashboard() {
               <p className="text-xs text-muted-foreground">Investment value</p>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Payouts / Account Abstraction */}
+        <div className="mb-8">
+          <WithdrawTBA balanceEth={0} />
         </div>
 
         {/* Main Dashboard Tabs */}

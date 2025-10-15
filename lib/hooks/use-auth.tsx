@@ -51,7 +51,10 @@ interface AuthContextType {
   loginWithWallet: (role?: string) => Promise<void>
   loginAsSuperAdmin: (password: string) => Promise<void>
   logout: () => Promise<void>
+  /** Creates a smart account unconditionally via backend */
   createSmartAccount: () => Promise<string>
+  /** Creates a smart account only if user lacks one; returns the address */
+  ensureSmartAccount: () => Promise<string>
   updateKYCStatus: (verified: boolean) => void
   hasRole: (roles: UserRole | UserRole[]) => boolean
   hasPermission: (permission: string, resource?: string, action?: string) => boolean
@@ -303,14 +306,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       const smartAccountAddress = await authApi.createSmartAccount() as string
-
       setUser((prev) => (prev ? { ...prev, smartAccountAddress } : null))
-
       return smartAccountAddress
     } catch (error) {
       console.error("Smart account creation failed:", error)
       throw error
     }
+  }
+
+  /** Ensure a Smart Account exists for non‑crypto/social users when doing power actions */
+  const ensureSmartAccount = async (): Promise<string> => {
+    if (!user) throw new Error("User not authenticated")
+    if (user.smartAccountAddress) return user.smartAccountAddress
+    return await createSmartAccount()
   }
 
   const hasRole = (roles: UserRole | UserRole[]): boolean => {
@@ -352,6 +360,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loginAsSuperAdmin,
         logout,
         createSmartAccount,
+        ensureSmartAccount,
         updateKYCStatus,
         hasRole,
         hasPermission,

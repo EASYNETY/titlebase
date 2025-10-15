@@ -146,12 +146,12 @@ export function PropertyCard({
                     <span className="text-sm font-medium text-destructive">{formatTimeRemaining(auctionEndTime)}</span>
                   )}
                 </div>
-                <div className="text-xl font-bold text-primary">{currentBid || "No bids yet"}</div>
+                <div className="text-xl font-bold text-primary">{currentBid ? currentBid.replace('ETH', 'NZD') : "No bids yet"}</div>
               </>
             ) : (
               <>
                 <span className="text-sm text-muted-foreground">Fixed Price</span>
-                <div className="text-xl font-bold text-primary">{price}</div>
+                <div className="text-xl font-bold text-primary">{price.replace('ETH', 'NZD')}</div>
               </>
             )}
             <div className="text-sm text-muted-foreground">Assessed Value:NZD {assessedValue}</div>

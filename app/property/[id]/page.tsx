@@ -292,10 +292,10 @@ export default function PropertyDetailPage() {
           {/* Price and Action */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="space-y-1">
-              <div className="text-3xl font-bold text-primary">{listing.price} ETH</div>
+              <div className="text-3xl font-bold text-primary">{listing.price} NZD</div>
               <div className="text-sm text-muted-foreground">Assessed Value: <strong>NZD</strong>{property.assessed_value ? property.assessed_value.toLocaleString() : 'N/A'}</div>
               {listing.listing_type === 'auction' && listing.current_bid && (
-                <div className="text-sm text-muted-foreground">Current Bid: {listing.current_bid} ETH</div>
+                <div className="text-sm text-muted-foreground">Current Bid: {listing.current_bid} NZD</div>
               )}
             </div>
 
@@ -303,7 +303,7 @@ export default function PropertyDetailPage() {
               {property.isAuction ? (
                 <div className="flex gap-2 w-full md:w-auto">
                   <Input
-                    placeholder="Enter bid amount (ETH)"
+                    placeholder="Enter bid amount (NZD)"
                     value={bidAmount}
                     onChange={(e) => setBidAmount(e.target.value)}
                     className="flex-1"

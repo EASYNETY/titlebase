@@ -74,7 +74,7 @@ export function PaymentModal({ open, onOpenChange, property, onPaymentComplete }
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Complete Purchase</DialogTitle>
+          <DialogTitle>Confirm your purchase of a verified title-backed token.</DialogTitle>
           <DialogDescription>Choose your payment method and complete the transaction</DialogDescription>
         </DialogHeader>
 

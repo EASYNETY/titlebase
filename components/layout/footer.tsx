@@ -33,8 +33,7 @@ export function Footer() {
               <span className="font-bold text-lg">TitleBase</span>
             </div>
             <p className="text-muted-foreground mb-6 text-pretty">
-              New Zealand's premier real estate NFT marketplace. Democratizing property investment through blockchain
-              technology and fractional ownership.
+              Titlebase is a marketplace for tokenised real estate.
             </p>
 
             {/* Newsletter Signup */}

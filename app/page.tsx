@@ -40,9 +40,9 @@ export default function HomePage() {
   const currentHero = heroItems.length > 0 ? heroItems[heroIndex % heroItems.length] : null
   const heroImage =
     (currentHero?.images && currentHero.images.length > 0 && currentHero.images[0]) || "/luxury-beach-house.png"
-  const heroTitle = currentHero?.title || "Discover the difference with TitleBase"
-  const heroLocation = currentHero?.address || "Premium Real‑Estate NFTs"
-  const heroPrice = currentHero?.listing_price ? `${currentHero.listing_price} ETH` : undefined
+  const heroTitle = currentHero?.title || "Verified property. Real ownership."
+  const heroLocation = currentHero?.address || "A trusted platform for tokenised property titles."
+  const heroPrice = currentHero?.listing_price ? `${currentHero.listing_price} NZD` : undefined
   const primaryCtaLabel = currentHero?.listing_type === "auction" ? "Bid Now" : "View Property"
 
   useEffect(() => {
@@ -167,7 +167,7 @@ export default function HomePage() {
                     </>
                   ) : (
                     <Button asChild size="lg">
-                      <Link href="/marketplace">Browse Marketplace</Link>
+                      <Link href="/marketplace">Discover Available Properties</Link>
                     </Button>
                   )}
                 </div>
@@ -225,7 +225,7 @@ export default function HomePage() {
       <section className="relative py-14 md:py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold">
-            Invest in Premium Property NFTs
+            Access verified property titles
           </h2>
           <p className="mt-3 text-muted-foreground max-w-3xl mx-auto">
             Discover fractional ownership opportunities in real estate through secure blockchain technology.
@@ -248,7 +248,7 @@ export default function HomePage() {
               </div>
               <h4 className="mt-2 text-lg font-semibold">Verify & Tokenize</h4>
               <p className="mt-2 text-sm text-muted-foreground">
-                Properties are legally verified and tokenized into NFTs for transparent on‑chain ownership.
+                Verified property titles are represented as title-backed tokens and made accessible through the Titlebase platform.
               </p>
             </div>
             <div className="relative rounded-2xl border border-white/10 bg-background/70 p-6 backdrop-blur">
@@ -257,7 +257,7 @@ export default function HomePage() {
               </div>
               <h4 className="mt-2 text-lg font-semibold">Fractional Invest</h4>
               <p className="mt-2 text-sm text-muted-foreground">
-                Acquire fractions as NFTs to access income and appreciation with low friction.
+                Authorised users can buy, hold, and trade title-backed tokens representing real property.
               </p>
             </div>
             <div className="relative rounded-2xl border border-white/10 bg-background/70 p-6 backdrop-blur">
@@ -266,7 +266,7 @@ export default function HomePage() {
               </div>
               <h4 className="mt-2 text-lg font-semibold">Automated Payouts</h4>
               <p className="mt-2 text-sm text-muted-foreground">
-                Rental income is distributed to holders via audited smart contracts with real‑time tracking.
+                Users receive their share of rental income into the token's Smart Account, and can view all records and documents in real time.
               </p>
             </div>
           </div>
@@ -302,10 +302,10 @@ export default function HomePage() {
                 const firstImage =
                   property.images && property.images.length > 0 ? property.images[0] : "/placeholder.jpg"
                 const isVerified = property.verification_status === "verified"
-                const price = property.listing_price ? `${property.listing_price} ETH` : "Contact for Price"
+                const price = property.listing_price ? `${property.listing_price} NZD` : "Contact for Price"
                 const isAuction = property.listing_type === "auction"
                 const auctionEndTime = property.end_time
-                const currentBid = property.listing_price ? `${property.listing_price} ETH` : undefined
+                const currentBid = property.listing_price ? `${property.listing_price} NZD` : undefined
                 const assessedValue = property.assessed_value || "N/A"
 
                 return (
